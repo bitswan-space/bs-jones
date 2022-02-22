@@ -1,2 +1,3 @@
 site/
 script.py
+__pycache__/
