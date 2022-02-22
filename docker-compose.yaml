@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  bs-jones:
+    build: .
+    network_mode: host
+    env_file:
+      - ./site/.env
+    volumes:
+      - ./site/odbcinst.ini:/etc/odbcinst.ini
