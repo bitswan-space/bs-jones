@@ -57,7 +57,7 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		print(query)
+		L.info("Currently executing {}".format(query))
 		cnxn = pyodbc.connect(self.connection_string)
 		cursor = cnxn.cursor()
 		cursor.execute(query)
@@ -74,7 +74,8 @@ class SybaseEventGenerator(bspump.Generator):
 			try:
 				await self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
-				print(e)
+				# TODO: deal with this better
+				L.debug("Nonetype {}".format(e))
 
 		cursor.close()
 		cnxn.close()
