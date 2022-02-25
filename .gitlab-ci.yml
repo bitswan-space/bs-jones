@@ -9,7 +9,7 @@ test flake8:
     - apt-get update
     - pip install --upgrade pip
     - pip install flake8
-    - python3 -m flake8 bs_shoveler bs_shoveler.py
+    - python3 -m flake8 bs_jones bs_jones.py
 
 build docker:
   stage: build
