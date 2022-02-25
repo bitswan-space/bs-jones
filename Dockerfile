@@ -37,7 +37,6 @@ RUN apt-get install -y git
 
 RUN mkdir -p /opt/bs-jones
 
-# COPY ./script.py /opt/bs-jones/script.py
 COPY ./bs_jones.py /opt/bs-jones
 COPY ./bs_jones /opt/bs-jones/bs_jones
 
