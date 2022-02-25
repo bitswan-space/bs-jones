@@ -1,0 +1,38 @@
+stages:
+  - test
+  - build
+
+test flake8:
+  stage: test
+  image: python:3.8
+  script:
+    - apt-get update
+    - pip install --upgrade pip
+    - pip install flake8
+    - python3 -m flake8 bs_shoveler bs_shoveler.py
+
+build docker:
+  stage: build
+  image: docker:20
+
+  tags:
+    # The shell Gitlab runner has to be used for this
+    - shell
+
+  only:
+    # Execute only for master branch
+    - master
+
+    # We want to run in the clean environment
+    - docker system prune -f
+
+  script:
+    - docker build -t $DOCKER_REGISTRY_IMAGE .
+    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+    - docker tag $DOCKER_REGISTRY_IMAGE $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE
+    - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_IMAGE
+
+  after_script:
+    # Clean-up
+    - docker container prune -f > /dev/null 2> /dev/null
+    - docker image prune -a -f > /dev/null 2> /dev/null

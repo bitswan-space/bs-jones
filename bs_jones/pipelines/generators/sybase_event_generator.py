@@ -82,5 +82,5 @@ class SybaseEventGenerator(bspump.Generator):
 
 	def round_minutes(self, dt, resolutionInMinutes):
 		dtTrunc = dt.replace(second=0, microsecond=0)
-		excessMinutes = (dtTrunc.hour*60 + dtTrunc.minute) % resolutionInMinutes
+		excessMinutes = (dtTrunc.hour * 60 + dtTrunc.minute) % resolutionInMinutes
 		return dtTrunc + timedelta(minutes=-excessMinutes)
