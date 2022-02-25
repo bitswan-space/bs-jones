@@ -20,3 +20,19 @@ bootstrap_servers=kafka-1:9092,kafka-2:9092,kafka-3:9092
 topic=testP-eniq
 
 ```
+
+## Example docker-compose
+
+```
+version: '3.8'
+services:
+  bs-jones:
+    image: bs-jones
+    network_mode: host
+    env_file:
+      - ./site/.env
+    volumes:
+      - ./site/odbcinst.ini:/etc/odbcinst.ini
+      - ./site/site.conf:/conf/bs-jones.conf
+      - ./site/sql_query:/conf/sql_query
+```

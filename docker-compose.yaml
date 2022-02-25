@@ -9,3 +9,4 @@ services:
       - ./site/odbcinst.ini:/etc/odbcinst.ini
       - ./site/site.conf:/conf/bs-jones.conf
       - ./site/sql_query:/conf/sql_query
+      - ./site/sybase:/opt/sybase
