@@ -1,5 +1,5 @@
-from bs_jones import BSJonesApp
+import bs_jones
 
 if __name__ == '__main__':
-	app = BSJonesApp()
+	app = bs_jones.BSJonesApp()
 	app.run()

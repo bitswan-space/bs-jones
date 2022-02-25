@@ -28,7 +28,7 @@ class BSJonesPipeline(bspump.Pipeline):
 		super().__init__(app, pipeline_id)
 
 		self.build(
-			# 43200
+			# 900
 			LoadSource(app, self).on(bspump.trigger.PeriodicTrigger(app, 10)),
 			SybaseEventGenerator(app, self),
 			bspump.common.StdDictToJsonParser(app, self),

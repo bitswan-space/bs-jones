@@ -1,9 +1,10 @@
 version: '3.8'
 services:
   bs-jones:
-    build: .
+    image: bs-jones:alpha
     network_mode: host
     env_file:
       - ./site/.env
     volumes:
       - ./site/odbcinst.ini:/etc/odbcinst.ini
+      - ./site/site.conf:/conf/bs-jones.conf
