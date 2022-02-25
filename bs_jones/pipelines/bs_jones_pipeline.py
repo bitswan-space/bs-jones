@@ -1,5 +1,6 @@
 import logging
 
+import asab
 import bspump
 import bspump.file
 import bspump.trigger
@@ -17,7 +18,6 @@ class LoadSource(bspump.TriggerSource):
 
 	def __init__(self, app, pipeline, choice=None, id=None, config=None):
 		super().__init__(app, pipeline, id=id, config=config)
-		self.Number = 500000
 
 	async def cycle(self):
 		await self.process("event")
@@ -26,10 +26,10 @@ class LoadSource(bspump.TriggerSource):
 class BSJonesPipeline(bspump.Pipeline):
 	def __init__(self, app, pipeline_id):
 		super().__init__(app, pipeline_id)
+		self.QueryInterval = asab.Config.get("sybase", "query_interval")
 
 		self.build(
-			# 900
-			LoadSource(app, self).on(bspump.trigger.PeriodicTrigger(app, 10)),
+			LoadSource(app, self).on(bspump.trigger.PeriodicTrigger(app, self.QueryInterval)),
 			SybaseEventGenerator(app, self),
 			bspump.common.StdDictToJsonParser(app, self),
 			bspump.common.StringToBytesParser(app, self),
