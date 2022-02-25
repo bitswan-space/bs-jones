@@ -16,7 +16,7 @@ asab.Config.add_defaults(
 			"username": 'dcpublic',
 			"password": 'En1q_dcpublic#147',
 			"driver": '{ODBC Driver for Sybase IQ 16 SQL Server}',
-			"query": '/home/jakub/work/repos/o2sk/bs-jones/site/sql_query'
+			"query": './'
 		}
 	}
 )

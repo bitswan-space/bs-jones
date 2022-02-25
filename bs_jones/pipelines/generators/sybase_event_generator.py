@@ -49,7 +49,7 @@ class SybaseEventGenerator(bspump.Generator):
 
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
-		L.info("Connection string".format(self.connection_string))
+		L.info("Connection string {}".format(self.connection_string))
 
 	async def generate(self, context, event, depth):
 		current_time = self.round_minutes(datetime.now(), 15)

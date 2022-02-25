@@ -1,3 +1,4 @@
 site/
 script.py
 __pycache__/
+docker-compose.yaml
