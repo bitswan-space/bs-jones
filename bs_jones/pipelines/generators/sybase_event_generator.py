@@ -49,7 +49,7 @@ class SybaseEventGenerator(bspump.Generator):
 
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
-		L.info("Connection string {}".format(self.connection_string))
+		L.log(asab.LOG_NOTICE, "Connection string {}".format(self.connection_string))
 
 	async def generate(self, context, event, depth):
 		current_time = self.round_minutes(datetime.now(), 15)
@@ -57,7 +57,7 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.info("Currently executing {}".format(query))
+		L.log(asab.LOG_NOTICE, "Currently executing {}".format(query))
 		cnxn = pyodbc.connect(self.connection_string)
 		cursor = cnxn.cursor()
 		cursor.execute(query)
