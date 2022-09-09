@@ -26,10 +26,10 @@ class LoadSource(bspump.TriggerSource):
 class BSJonesPipeline(bspump.Pipeline):
 	def __init__(self, app, pipeline_id):
 		super().__init__(app, pipeline_id)
-		self.QueryInterval = int(asab.Config.get("sybase", "query_interval"))
+		self.QueryInterval = int(eval(asab.Config.get("sybase", "query_interval")))
 
 		self.build(
-			LoadSource(app, self).on(bspump.trigger.PeriodicTrigger(app, self.QueryInterval)),
+			LoadSource(app, self).on(bspump.trigger.OpportunisticTrigger(app,self,chilldown_period=self.QueryInterval)),
 			SybaseEventGenerator(app, self),
 			bspump.common.StdDictToJsonParser(app, self),
 			bspump.common.StringToBytesParser(app, self),

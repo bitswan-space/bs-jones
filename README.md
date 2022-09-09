@@ -12,12 +12,16 @@ password=staff_of_ra
 driver={U-Boat}
 host=localhost
 port=3456
+resolution=60*60*24
+daily=true
 
 [connection:KafkaConnection]
 bootstrap_servers=kafka-1:9092,kafka-2:9092,kafka-3:9092
 
 [pipeline:BSJonesPipeline:KafkaSink]
 topic=testP-eniq
+
+
 
 ```
 

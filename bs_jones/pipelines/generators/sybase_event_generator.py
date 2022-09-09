@@ -47,12 +47,26 @@ class SybaseEventGenerator(bspump.Generator):
 			"query"
 		)
 
+		self.resolution = asab.Config.get(
+			"sybase",
+			"resolution"
+		)
+
+		self.daily = asab.Config.get(
+			"sybase",
+			"daily"
+		)
+
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
 		L.log(asab.LOG_NOTICE, "Connection string {}".format(self.connection_string))
 
 	async def generate(self, context, event, depth):
-		current_time = self.round_minutes(datetime.now(), 15)
+
+		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
+		
+		if(self.daily):
+			current_time.date()
 
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
