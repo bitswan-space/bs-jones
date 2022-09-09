@@ -66,7 +66,7 @@ class SybaseEventGenerator(bspump.Generator):
 		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
 		
 		if(self.daily):
-			current_time.date()
+			current_time = current_time.date()
 
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
@@ -86,6 +86,7 @@ class SybaseEventGenerator(bspump.Generator):
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
 			try:
+				print(event_new)
 				await self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO: deal with this better
