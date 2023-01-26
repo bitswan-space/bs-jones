@@ -64,8 +64,9 @@ class SybaseEventGenerator(bspump.Generator):
 	async def generate(self, context, event, depth):
 
 		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
-		
-		if(self.daily):
+
+		if (self.daily):
+			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
 
 		with open(self.QueryLocation, 'r') as q:
