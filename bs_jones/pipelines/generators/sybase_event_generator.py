@@ -87,7 +87,6 @@ class SybaseEventGenerator(bspump.Generator):
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
 			try:
-				print(event_new)
 				await self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO: deal with this better
