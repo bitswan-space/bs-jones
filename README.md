@@ -4,6 +4,7 @@ BS-Jones tackles the archaisms of the SAP Sybase database, executing a query, tr
 ## Example configuration
 
 ```
+#daily parameter must contain integer 1 -> True or 0 -> false
 [sybase]
 server=jerusalem
 database=ark_of_the_covenant
@@ -13,7 +14,7 @@ driver={U-Boat}
 host=localhost
 port=3456
 resolution=60*60*24
-daily=true
+daily=1
 
 [connection:KafkaConnection]
 bootstrap_servers=kafka-1:9092,kafka-2:9092,kafka-3:9092
