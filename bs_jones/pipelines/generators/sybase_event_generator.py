@@ -65,6 +65,10 @@ class SybaseEventGenerator(bspump.Generator):
 
 		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
 
+		try:
+			self.daily = int(self.daily)
+		except Exception as e:
+			L.debug("Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
 		if (self.daily):
 			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
