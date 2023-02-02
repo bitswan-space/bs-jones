@@ -26,7 +26,11 @@ class LoadSource(bspump.TriggerSource):
 class BSJonesPipeline(bspump.Pipeline):
 	def __init__(self, app, pipeline_id):
 		super().__init__(app, pipeline_id)
-		self.QueryInterval = int(eval(asab.Config.get("sybase", "query_interval")))
+
+		try:
+			self.QueryInterval = int(eval(asab.Config.get("sybase", "query_interval")))
+		except Exception as e:
+			L.debug("query_interval in config must be either an expression or an number {}".format(e))
 
 		self.build(
 			LoadSource(app, self).on(bspump.trigger.OpportunisticTrigger(app, self, chilldown_period=self.QueryInterval)),

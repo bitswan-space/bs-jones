@@ -63,6 +63,11 @@ class SybaseEventGenerator(bspump.Generator):
 
 	async def generate(self, context, event, depth):
 
+		try:
+			self.resolution = eval(self.resolution)
+		except Exception as e:
+			L.debug("resolution in config must be either an expression or an number {}".format(e))
+
 		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
 
 		try:
