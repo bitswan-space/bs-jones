@@ -98,7 +98,7 @@ class SybaseEventGenerator(bspump.Generator):
 			try:
 				await self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
-				# TODO: deal with this better
+				# TODO:  deal with this better
 				L.debug("Nonetype {}".format(e))
 
 		cursor.close()
