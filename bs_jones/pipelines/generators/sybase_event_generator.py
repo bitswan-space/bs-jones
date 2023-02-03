@@ -47,12 +47,36 @@ class SybaseEventGenerator(bspump.Generator):
 			"query"
 		)
 
+		self.resolution = asab.Config.get(
+			"sybase",
+			"resolution"
+		)
+
+		self.daily = asab.Config.get(
+			"sybase",
+			"daily"
+		)
+
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
 		L.log(asab.LOG_NOTICE, "Connection string {}".format(self.connection_string))
 
 	async def generate(self, context, event, depth):
-		current_time = self.round_minutes(datetime.now(), 15)
+
+		try:
+			self.resolution = eval(self.resolution)
+		except Exception as e:
+			L.debug("resolution in config must be either an expression or an number {}".format(e))
+
+		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
+
+		try:
+			self.daily = int(self.daily)
+		except Exception as e:
+			L.debug("Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
+		if (self.daily):
+			current_time = datetime.now() - timedelta(1)
+			current_time = current_time.date()
 
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
