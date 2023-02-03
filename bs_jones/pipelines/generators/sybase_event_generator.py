@@ -68,7 +68,7 @@ class SybaseEventGenerator(bspump.Generator):
 		except Exception as e:
 			L.debug("resolution in config must be either an expression or an number {}".format(e))
 
-		current_time = self.round_minutes(datetime.now(), eval(self.resolution))
+		current_time = self.round_minutes(datetime.now(), self.resolution)
 
 		try:
 			self.daily = int(self.daily)
