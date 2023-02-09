@@ -36,3 +36,26 @@ build docker:
     # Clean-up
     - docker container prune -f > /dev/null 2> /dev/null
     - docker image prune -a -f > /dev/null 2> /dev/null
+
+
+build docker-tag:
+  stage: build
+  image: docker:20
+
+  tags:
+    # The shell Gitlab runner has to be used for this
+    - shell
+
+  only:
+    - tags
+
+  before_script:
+    - docker info
+    # We want to run in the clean environment
+    - docker system prune -f
+
+  script:
+    - docker build -t "${DOCKER_REGISTRY}/${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_TAG}" --no-cache .
+    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+    - docker push "${DOCKER_REGISTRY}/${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+    - docker rmi "${DOCKER_REGISTRY}/${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
