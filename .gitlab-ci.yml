@@ -5,6 +5,8 @@ stages:
 test flake8:
   stage: test
   image: python:3.8
+  tags:
+    - docker
   script:
     - apt-get update
     - pip install --upgrade pip
@@ -22,6 +24,12 @@ build docker:
   only:
     # Execute only for master branch
     - master
+
+    # We want to run in the clean environment
+    - docker system prune -f
+
+  before_script:
+    - docker info
 
     # We want to run in the clean environment
     - docker system prune -f
