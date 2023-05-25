@@ -63,8 +63,18 @@ class SybaseEventGenerator(bspump.Generator):
 
 		L.log(asab.LOG_NOTICE, "Connection string {}".format(self.connection_string))
 
-
 	async def generate(self, context, event, depth):
+		"""
+		Ignore errors caused by transient SQL connection issues.
+		"""
+		try:
+			await self._generate(context, event, depth)
+		except Exception as e:
+			# log full error as a stacktrace using traceback module
+			L.debug("SybaseEventGenerator error: {} {}".format(traceback.format_exc(),e))
+
+
+	async def _generate(self, context, event, depth):
 
 		try:
 			self.resolution = eval(self.resolution)
