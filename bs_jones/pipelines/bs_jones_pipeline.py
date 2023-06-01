@@ -39,3 +39,6 @@ class BSJonesPipeline(bspump.Pipeline):
 			bspump.common.StringToBytesParser(app, self),
 			fastkafka.FastKafkaSink(app, self, "KafkaConnection", id="KafkaSink")
 		)
+
+	def handle_error(*args, **kwargs):
+		return True
