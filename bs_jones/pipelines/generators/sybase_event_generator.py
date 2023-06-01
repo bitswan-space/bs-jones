@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import bspump
 import asab
 
-import traceback
 
 L = logging.getLogger(__name__)
 
