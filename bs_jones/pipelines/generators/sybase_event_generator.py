@@ -77,7 +77,7 @@ class SybaseEventGenerator(bspump.Generator):
 	async def _generate(self, context, event, depth):
 
 		try:
-			self.resolution = eval(self.resolution)
+			self.resolution = eval(str(self.resolution))
 		except Exception as e:
 			L.warning("resolution in config must be either an expression or an number {}".format(e))
 
