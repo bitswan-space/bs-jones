@@ -71,7 +71,7 @@ class SybaseEventGenerator(bspump.Generator):
 			await self._generate(context, event, depth)
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
-			L.debug("SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
+			L.warning("SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
 
 
 	async def _generate(self, context, event, depth):
@@ -79,14 +79,14 @@ class SybaseEventGenerator(bspump.Generator):
 		try:
 			self.resolution = eval(self.resolution)
 		except Exception as e:
-			L.debug("resolution in config must be either an expression or an number {}".format(e))
+			L.warning("resolution in config must be either an expression or an number {}".format(e))
 
 		current_time = self.round_minutes(datetime.now(), self.resolution)
 
 		try:
 			self.daily = int(self.daily)
 		except Exception as e:
-			L.debug("Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
+			L.warning("Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
 		if (self.daily):
 			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
@@ -94,14 +94,14 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.log(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
+		L.info(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
 		try:
 			cnxn = pyodbc.connect(self.connection_string)
 		except Exception as e:
-			L.debug("Connection failed {}".format(e))
+			L.warning("Connection failed {}".format(e))
 			return
 		cursor = cnxn.cursor()
-		L.log(asab.LOG_NOTICE, "Currently executing {}".format(query))
+		L.info(asab.LOG_NOTICE, "Currently executing {}".format(query))
 		cursor.execute(query)
 		columns = [column[0] for column in cursor.description]
 
@@ -117,7 +117,7 @@ class SybaseEventGenerator(bspump.Generator):
 				await self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
-				L.debug("Nonetype {}".format(e))
+				L.warning("Nonetype {}".format(e))
 
 		cursor.close()
 		cnxn.close()
