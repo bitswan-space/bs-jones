@@ -72,6 +72,8 @@ class SybaseEventGenerator(bspump.Generator):
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
 			L.debug("SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
+			# stop the pipeline
+			self.Pipeline.stop()
 
 
 	async def _generate(self, context, event, depth):
