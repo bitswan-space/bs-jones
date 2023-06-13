@@ -117,7 +117,7 @@ class SybaseEventGenerator(bspump.Generator):
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
-				L.warning("Nonetype {}".format(e))
+				L.info("Nonetype {}".format(e))
 
 		cursor.close()
 		cnxn.close()
