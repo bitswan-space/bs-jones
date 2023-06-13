@@ -72,8 +72,6 @@ class SybaseEventGenerator(bspump.Generator):
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
 			L.debug("SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
-			# stop the pipeline
-			self.Pipeline.stop()
 
 
 	async def _generate(self, context, event, depth):
@@ -96,9 +94,14 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.log(asab.LOG_NOTICE, "Currently executing {}".format(query))
-		cnxn = pyodbc.connect(self.connection_string)
+		L.log(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
+		try:
+			cnxn = pyodbc.connect(self.connection_string)
+		except Exception as e:
+			L.debug("Connection failed {}".format(e))
+			return
 		cursor = cnxn.cursor()
+		L.log(asab.LOG_NOTICE, "Currently executing {}".format(query))
 		cursor.execute(query)
 		columns = [column[0] for column in cursor.description]
 
