@@ -72,7 +72,7 @@ class SybaseEventGenerator(bspump.Generator):
 			await self._generate(context, event, depth)
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
-			L.warning("SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
+			L.log(asab.LOG_WARNING,"SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
 
 
 	async def _generate(self, context, event, depth):
@@ -80,7 +80,7 @@ class SybaseEventGenerator(bspump.Generator):
 		try:
 			self.resolution = eval(str(self.resolution))
 		except Exception as e:
-			L.warning("resolution in config must be either an expression or an number {}".format(e))
+			L.log(asab.LOG_WARNING,"resolution in config must be either an expression or an number {}".format(e))
 
 		current_time = self.round_minutes(datetime.now(), self.resolution)
 
@@ -95,14 +95,14 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.info(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
+		L.log(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
 		try:
 			cnxn = pyodbc.connect(self.connection_string)
 		except Exception as e:
 			L.warning("Connection failed {}".format(e))
 			return
 		cursor = cnxn.cursor()
-		L.info(asab.LOG_NOTICE, "Currently executing {}".format(query))
+		L.log(asab.LOG_NOTICE, "Currently executing {}".format(query))
 
 		start_time = time.time()
 
@@ -110,7 +110,7 @@ class SybaseEventGenerator(bspump.Generator):
 
 		elapsed_time = time.time() - start_time
 
-		L.info(asab.LOG_NOTICE, "Query took {} seconds".format(elapsed_time))
+		L.log(asab.LOG_NOTICE, "Query took {} seconds".format(elapsed_time))
 
 		columns = [column[0] for column in cursor.description]
 
