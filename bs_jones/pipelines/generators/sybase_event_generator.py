@@ -2,6 +2,7 @@ import logging
 import pyodbc
 from decimal import Decimal
 from datetime import datetime, timedelta
+import time
 
 import bspump
 import asab
@@ -102,7 +103,13 @@ class SybaseEventGenerator(bspump.Generator):
 			return
 		cursor = cnxn.cursor()
 		L.info(asab.LOG_NOTICE, "Currently executing {}".format(query))
+
+		time = time.time()
+
 		cursor.execute(query)
+
+		L.info(asab.LOG_NOTICE, "Query took {} seconds".format(time.time() - time))
+
 		columns = [column[0] for column in cursor.description]
 
 		for row in cursor.fetchall():
