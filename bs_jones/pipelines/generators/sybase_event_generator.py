@@ -104,11 +104,13 @@ class SybaseEventGenerator(bspump.Generator):
 		cursor = cnxn.cursor()
 		L.info(asab.LOG_NOTICE, "Currently executing {}".format(query))
 
-		time = time.time()
+		start_time = time.time()
 
 		cursor.execute(query)
 
-		L.info(asab.LOG_NOTICE, "Query took {} seconds".format(time.time() - time))
+		elapsed_time = time.time() - start_time
+
+		L.info(asab.LOG_NOTICE, "Query took {} seconds".format(elapsed_time))
 
 		columns = [column[0] for column in cursor.description]
 
