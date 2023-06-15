@@ -97,7 +97,10 @@ class SybaseEventGenerator(bspump.Generator):
 
 		L.log(asab.LOG_NOTICE, "Trying to connect to {}".format(self.connection_string))
 		try:
+			start_connection = time.time()
 			cnxn = pyodbc.connect(self.connection_string)
+			elapsed_connection = time.time() - start_connection
+			L.log(asab.LOG_NOTICE, "Connection took {} seconds".format(elapsed_connection))
 		except Exception as e:
 			L.warning("Connection failed {}".format(e))
 			return
