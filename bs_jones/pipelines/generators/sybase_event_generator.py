@@ -72,7 +72,7 @@ class SybaseEventGenerator(bspump.Generator):
 			await self._generate(context, event, depth)
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
-			L.log(asab.LOG_WARNING,"SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
+			L.log(asab.LOG_WARNING, "SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
 
 
 	async def _generate(self, context, event, depth):
@@ -80,7 +80,7 @@ class SybaseEventGenerator(bspump.Generator):
 		try:
 			self.resolution = eval(str(self.resolution))
 		except Exception as e:
-			L.log(asab.LOG_WARNING,"resolution in config must be either an expression or an number {}".format(e))
+			L.log(asab.LOG_WARNING, "resolution in config must be either an expression or an number {}".format(e))
 
 		current_time = self.round_minutes(datetime.now(), self.resolution)
 
