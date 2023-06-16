@@ -62,7 +62,7 @@ class SybaseEventGenerator(bspump.Generator):
 
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
-		L.log(asab.INFO, "Connection string {}".format(self.connection_string))
+		L.debug("Connection string {}".format(self.connection_string))
 
 	async def generate(self, context, event, depth):
 		"""
@@ -95,7 +95,7 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.log(asab.INFO, "Trying to connect to {}".format(self.connection_string))
+		L.debug("Trying to connect to {}".format(self.connection_string))
 		try:
 			start_connection = time.time()
 			cnxn = pyodbc.connect(self.connection_string)
@@ -105,7 +105,7 @@ class SybaseEventGenerator(bspump.Generator):
 			L.warning("Connection failed {}".format(e))
 			return
 		cursor = cnxn.cursor()
-		L.log(asab.INFO, "Currently executing {}".format(query))
+		L.debug("Currently executing {}".format(query))
 
 		start_time = time.time()
 
