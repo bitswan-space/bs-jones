@@ -95,17 +95,14 @@ class SybaseEventGenerator(bspump.Generator):
 		with open(self.QueryLocation, 'r') as q:
 			query = q.read().format(current_time)
 
-		L.debug("Trying to connect to {}".format(self.connection_string))
 		try:
 			start_connection = time.time()
 			cnxn = pyodbc.connect(self.connection_string)
 			elapsed_connection = time.time() - start_connection
-			L.log(asab.LOG_NOTICE, "Connection took {} seconds".format(elapsed_connection))
 		except Exception as e:
 			L.warning("Connection failed {}".format(e))
 			return
 		cursor = cnxn.cursor()
-		L.debug("Currently executing {}".format(query))
 
 		start_time = time.time()
 
@@ -113,7 +110,7 @@ class SybaseEventGenerator(bspump.Generator):
 
 		elapsed_time = time.time() - start_time
 
-		L.log(asab.LOG_NOTICE, "Query took {} seconds".format(elapsed_time))
+		L.log(asab.LOG_NOTICE, "Connection took {} seconds, Query took {} seconds".format(elapsed_connection, elapsed_time))
 
 		columns = [column[0] for column in cursor.description]
 
