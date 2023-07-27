@@ -30,7 +30,6 @@ topic=testP-eniq
 ```
 
 ## Example docker-compose
-
 ```
 version: '3.8'
 services:
