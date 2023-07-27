@@ -14,7 +14,7 @@ test flake8:
     - python3 -m flake8 bs_jones bs_jones.py
 
 variables:
-  DOCKER_IMAGE: o2sk/bs-eci-rename
+  DOCKER_IMAGE: o2sk/bs-jones
 
 include:
   - project: 'LibertyAces/Product/bitswanmonorepo'
