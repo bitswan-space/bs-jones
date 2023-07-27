@@ -1,8 +1,11 @@
-FROM teskalabs/bspump:nightly
-MAINTAINER TeskaLabs Ltd (support@teskalabs.com)
+FROM public.ecr.aws/h9w9d7v3/bspump:2023-39-git-8444683
 
-# http://bugs.python.org/issue19846
-# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
+LABEL src=https://gitlab.com/LibertyAces/O2SK/bs-telco-wifi-scan
+
+RUN set -ex \
+&& apt-get -y update \
+&& apt-get -y upgrade
+
 ENV LANG C.UTF-8
 
 RUN apt-get update
