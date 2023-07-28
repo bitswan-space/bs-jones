@@ -6,7 +6,7 @@ import bspump.file
 import bspump.trigger
 import bspump.common
 import bspump.abc.source
-import fastkafka
+import bspump.kafka
 
 from .generators import SybaseEventGenerator
 
@@ -37,7 +37,7 @@ class BSJonesPipeline(bspump.Pipeline):
 			SybaseEventGenerator(app, self),
 			bspump.common.StdDictToJsonParser(app, self),
 			bspump.common.StringToBytesParser(app, self),
-			fastkafka.FastKafkaSink(app, self, "KafkaConnection", id="KafkaSink")
+			bspump.kafka.KafkaSink(app, self, "KafkaConnection")
 		)
 
 	def handle_error(*args, **kwargs):

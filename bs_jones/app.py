@@ -1,7 +1,7 @@
 import asab
 import bspump
 import bspump.elasticsearch
-import fastkafka
+import bspump.kafka
 
 from .pipelines import BSJonesPipeline
 
@@ -29,6 +29,6 @@ class BSJonesApp(bspump.BSPumpApplication):
 		super().__init__()
 
 		self.BSPumpService = self.get_service("bspump.PumpService")
-		fast_kafka_connection = fastkafka.FastKafkaConnection(self, "KafkaConnection")
-		self.BSPumpService.add_connection(fast_kafka_connection)
+		kafka_connection = bspump.kafka.KafkaConnection(self, "KafkaConnection")
+		self.BSPumpService.add_connection(kafka_connection)
 		self.BSPumpService.add_pipeline(BSJonesPipeline(self, "BSJonesPipeline"))
