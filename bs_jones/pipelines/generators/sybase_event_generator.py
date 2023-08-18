@@ -72,7 +72,7 @@ class SybaseEventGenerator(bspump.Generator):
 			await self._generate(context, event, depth)
 		except Exception as e:
 			# log full error as a stacktrace using traceback module
-			L.log(asab.LOG_ERROR, "SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
+			L.log(asab.LOG_NOTICE, "SybaseEventGenerator error: {} {}".format(traceback.format_exc(), e))
 
 
 	async def _generate(self, context, event, depth):
@@ -80,14 +80,14 @@ class SybaseEventGenerator(bspump.Generator):
 		try:
 			self.resolution = eval(str(self.resolution))
 		except Exception as e:
-			L.log(asab.LOG_WARNING, "resolution in config must be either an expression or an number {}".format(e))
+			L.log(asab.LOG_NOTICE, "resolution in config must be either an expression or an number {}".format(e))
 
 		current_time = self.round_minutes(datetime.now(), self.resolution)
 
 		try:
 			self.daily = int(self.daily)
 		except Exception as e:
-			L.warning(asab.LOG_WARNING, "Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
+			L.log(asab.LOG_NOTICE, "Incorrect Daily format. Please use 0 for False 1 for True {}".format(e))
 		if (self.daily):
 			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
@@ -100,7 +100,7 @@ class SybaseEventGenerator(bspump.Generator):
 			cnxn = pyodbc.connect(self.connection_string)
 			elapsed_connection = time.time() - start_connection
 		except Exception as e:
-			L.warning("Connection failed {}".format(e))
+			L.log(asab.LOG_NOTICE, "Connection failed {}".format(e))
 			return
 		cursor = cnxn.cursor()
 
@@ -126,7 +126,7 @@ class SybaseEventGenerator(bspump.Generator):
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
-				L.info("Nonetype {}".format(e))
+				L.log("Nonetype {}".format(e))
 
 		cursor.close()
 		cnxn.close()
