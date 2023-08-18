@@ -122,6 +122,7 @@ class SybaseEventGenerator(bspump.Generator):
 				else:
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
+			print(event_new)
 			try:
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
