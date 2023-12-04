@@ -1,4 +1,4 @@
-FROM public.ecr.aws/h9w9d7v3/bspump:2023-39-git-8444683
+FROM public.ecr.aws/bitswan/bitswan-pre:sha256_0797b88ecccb8d491e16982e7ab06f97d827b0a482b56261909191f3e29d1e8e
 
 LABEL src=https://gitlab.com/LibertyAces/O2SK/bs-jones
 
