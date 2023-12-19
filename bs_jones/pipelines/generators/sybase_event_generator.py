@@ -60,6 +60,11 @@ class SybaseEventGenerator(bspump.Generator):
 			"daily"
 		)
 
+		try:
+			self.previous_timestamp = open("/conf/previous_timestamp.txt", "r").read()
+		except FileNotFoundError:
+			self.previous_timestamp = "NULL"
+
 		self.connection_string = "Driver={};UID={};PWD={};Server={};DBN={};CommLinks=TCPIP{};DriverUnicodeType=1".format(self.Driver, self.Username, self.Password, self.Server, self.Database, "{{host={};port={}}}".format(self.Host, self.Port))
 
 		L.debug("Connection string {}".format(self.connection_string))
@@ -92,8 +97,16 @@ class SybaseEventGenerator(bspump.Generator):
 			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
 
+		timestamp_field = asab.Config.get("sybase", "timestamp_field")
 		with open(self.QueryLocation, 'r') as q:
-			query = q.read().format(current_time)
+			context = {
+				"current_time": current_time,
+			}
+			if timestamp_field:
+				context["previuos_time"] = self.previous_timestamp
+			query = q.read().format(
+				**context
+			)
 
 		try:
 			start_connection = time.time()
@@ -122,12 +135,14 @@ class SybaseEventGenerator(bspump.Generator):
 				else:
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
+			self.previous_timestamp = event_new[timestamp_field]
 			print(event_new)
 			try:
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
 				L.log("Nonetype {}".format(e))
+			open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 
 		cursor.close()
 		cnxn.close()
