@@ -103,7 +103,7 @@ class SybaseEventGenerator(bspump.Generator):
 				"current_time": current_time,
 			}
 			if timestamp_field:
-				context["previuos_time"] = self.previous_timestamp
+				context["previous_time"] = self.previous_timestamp
 			query = q.read().format(
 				**context
 			)
