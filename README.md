@@ -14,7 +14,7 @@ driver={U-Boat}
 host=localhost
 port=3456
 query=/conf/sql_query
-query_interval=86400
+query_interval=* * * * *
 resolution=24*60
 daily=true
 
