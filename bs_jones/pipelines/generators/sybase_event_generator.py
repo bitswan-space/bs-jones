@@ -135,14 +135,15 @@ class SybaseEventGenerator(bspump.Generator):
 				else:
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
-			self.previous_timestamp = event_new[timestamp_field]
 			print(event_new)
+			if timestamp_field:
+				self.previous_timestamp = event_new[timestamp_field]
+				open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 			try:
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
 				L.log("Nonetype {}".format(e))
-			open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 
 		cursor.close()
 		cnxn.close()
