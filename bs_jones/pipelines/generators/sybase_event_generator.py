@@ -97,7 +97,7 @@ class SybaseEventGenerator(bspump.Generator):
 			current_time = datetime.now() - timedelta(1)
 			current_time = current_time.date()
 
-		timestamp_field = asab.Config.get("sybase", "timestamp_field")
+		timestamp_field = asab.Config.get("sybase", "timestamp_field", fallback=None)
 		with open(self.QueryLocation, 'r') as q:
 			context = {
 				"current_time": current_time,
