@@ -1,6 +1,9 @@
 # BS-Jones
 BS-Jones tackles the archaisms of the SAP Sybase database, executing a query, transforming it to events and loading those to Kafka.
 
+
+The pump loads sql_query file as a sql query and has ability to format the query with the current time. Specify the time that will be changed by {current_time} in the sql query.
+
 ## Example configuration
 
 ```
