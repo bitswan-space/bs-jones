@@ -104,7 +104,7 @@ class SybaseEventGenerator(bspump.Generator):
 			}
 			if timestamp_field:
 				if(self.previous_timestamp == "NULL"):
-					context["previous_time"] = current_time
+					self.previous_timestamp = current_time
 				context["previous_time"] = self.previous_timestamp
 			query = q.read().format(
 				**context
