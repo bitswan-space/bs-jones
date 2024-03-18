@@ -144,7 +144,7 @@ class SybaseEventGenerator(bspump.Generator):
 				self.previous_timestamp = event_new[timestamp_field]
 				open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 			try:
-				event_count =+ 1
+				event_count = event_count + 1
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
