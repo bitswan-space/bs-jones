@@ -129,6 +129,8 @@ class SybaseEventGenerator(bspump.Generator):
 
 		columns = [column[0] for column in cursor.description]
 
+		event_count = 0
+
 		for row in cursor.fetchall():
 			row_data = []
 			for data in row:
@@ -137,15 +139,18 @@ class SybaseEventGenerator(bspump.Generator):
 				else:
 					row_data.append(str(data))
 			event_new = dict(zip(columns, row_data))
-			print(event_new)
+
 			if timestamp_field:
 				self.previous_timestamp = event_new[timestamp_field]
 				open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 			try:
+				event_count =+ 1
 				self.Pipeline.inject(context, event_new, depth)
 			except Exception as e:
 				# TODO:  deal with this better
 				L.log("Nonetype {}".format(e))
+
+		L.log(asab.LOG_NOTICE, "Total number of events {} for previous timestamp {}".format(event_count, self.previous_timestamp))
 
 		cursor.close()
 		cnxn.close()
