@@ -141,7 +141,7 @@ class SybaseEventGenerator(bspump.Generator):
 			event_new = dict(zip(columns, row_data))
 
 			if timestamp_field:
-			self.previous_timestamp = event_new[timestamp_field]
+				self.previous_timestamp = event_new[timestamp_field]
 
 			try:
 				event_count = event_count + 1
@@ -151,7 +151,6 @@ class SybaseEventGenerator(bspump.Generator):
 				L.log("Nonetype {}".format(e))
 
 		if timestamp_field:
-			
 			open("/conf/previous_timestamp.txt", "w").write(self.previous_timestamp)
 
 		L.log(asab.LOG_NOTICE, "Total number of events {} for previous timestamp {}".format(event_count, self.previous_timestamp))
