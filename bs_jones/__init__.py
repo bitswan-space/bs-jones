@@ -1,5 +1,3 @@
 from .app import BSJonesApp
 
-__all__ = [
-	"BSJonesApp"
-]
+__all__ = ["BSJonesApp"]

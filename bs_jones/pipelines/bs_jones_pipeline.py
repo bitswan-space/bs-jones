@@ -16,31 +16,38 @@ L = logging.getLogger(__name__)
 
 
 class LoadSource(bspump.TriggerSource):
+    def __init__(self, app, pipeline, choice=None, id=None, config=None):
+        super().__init__(app, pipeline, id=id, config=config)
 
-	def __init__(self, app, pipeline, choice=None, id=None, config=None):
-		super().__init__(app, pipeline, id=id, config=config)
-
-	async def cycle(self):
-		await self.process("event")
+    async def cycle(self):
+        await self.process("event")
 
 
 class BSJonesPipeline(bspump.Pipeline):
-	def __init__(self, app, pipeline_id):
-		super().__init__(app, pipeline_id)
+    def __init__(self, app, pipeline_id):
+        super().__init__(app, pipeline_id)
 
-		try:
-			# in cron format eg. * * * * * for every minute
-			self.QueryInterval = asab.Config.get("sybase", "query_interval")
-		except Exception as e:
-			L.debug("query_interval in config must be either an expression or an number {}".format(e))
+        try:
+            # in cron format eg. * * * * * for every minute
+            self.QueryInterval = asab.Config.get("sybase", "query_interval")
+        except Exception as e:
+            L.debug(
+                "query_interval in config must be either an expression or an number {}".format(
+                    e
+                )
+            )
 
-		self.build(
-			LoadSource(app, self).on(bspump.trigger.CronTrigger(app=app, cron_string=self.QueryInterval, init_time=datetime.now())),
-			SybaseEventGenerator(app, self),
-			bspump.common.StdDictToJsonParser(app, self),
-			bspump.common.StringToBytesParser(app, self),
-			bspump.kafka.KafkaSink(app, self, "KafkaConnection")
-		)
+        self.build(
+            LoadSource(app, self).on(
+                bspump.trigger.CronTrigger(
+                    app=app, cron_string=self.QueryInterval, init_time=datetime.now()
+                )
+            ),
+            SybaseEventGenerator(app, self),
+            bspump.common.StdDictToJsonParser(app, self),
+            bspump.common.StringToBytesParser(app, self),
+            bspump.kafka.KafkaSink(app, self, "KafkaConnection"),
+        )
 
-	def handle_error(*args, **kwargs):
-		return True
+    def handle_error(*args, **kwargs):
+        return True
