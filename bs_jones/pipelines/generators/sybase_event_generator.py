@@ -135,6 +135,7 @@ class SybaseEventGenerator(bspump.Generator):
 
             try:
                 event_count = event_count + 1
+                await self.Pipeline.ready()
                 self.Pipeline.inject(context, event_new, depth)
             except Exception as e:
                 # TODO:  deal with this better
